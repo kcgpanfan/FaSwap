@@ -42,19 +42,6 @@ class VideoHandler(object):
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(lineno)d:%(message)s")
 
-parser = argparse.ArgumentParser(description='FaceSwap Video')
-parser.add_argument('--src_img', required=True, help='Path for source image')
-parser.add_argument('--video_path', default=0, help='Path for video')
-parser.add_argument('--warp_2d', default=False, action='store_true', help='2d or 3d warp')
-parser.add_argument('--correct_color', default=False, action='store_true', help='Correct color')
-parser.add_argument('--show', default=False, action='store_true', help='Show')
-parser.add_argument('--save_path', required=True, help='Path for storing output video')
-args = parser.parse_args()
-
-dir_path = os.path.dirname(args.save_path)
-if not os.path.isdir(dir_path):
-    os.makedirs(dir_path)
-
 st.title('Face Swap Video')
 
 uploaded_source_file = st.file_uploader("Source Image", type=['jpg', 'png', 'jpeg'])
@@ -62,8 +49,8 @@ uploaded_video_file = st.file_uploader("Video", type=['mp4', 'avi', 'mov'])
 
 if uploaded_source_file is not None and uploaded_video_file is not None:
     source_image = cv2.imread(uploaded_source_file.name)
-    video_path = os.path.join(os.getcwd(), uploaded_video_file.name)
-    save_path = os.path.join(os.getcwd(), args.save_path)
+    video_path = uploaded_video_file.name
+    save_path = st.text_input("Output Video Path", value="output.mp4")
 
     st.write('Source Image:')
     st.image(source_image, channels="BGR")
@@ -73,7 +60,15 @@ if uploaded_source_file is not None and uploaded_video_file is not None:
 
     if st.button('Start Face Swap'):
         with st.spinner('Processing...'):
-            VideoHandler(video_path, source_image, args).start()
+            args = argparse.Namespace(
+                src_img=uploaded_source_file.name,
+                video_path=video_path,
+                warp_2d=False,
+                correct_color=False,
+                show=False,
+                save_path=save_path
+            )
+            VideoHandler(video_path, uploaded_source_file.name, args).start()
         st.success('Face swap completed!')
 
 st.write('Please upload a source image and a video file to start the face swap process.')
