@@ -51,10 +51,9 @@ if __name__ == '__main__':
         with open(video_path, "wb") as file:
             file.write(uploaded_video_file.read())
 
-        cap = cv2.VideoCapture(video_path)
-        out = cv2.VideoWriter("output_video.mp4", cv2.VideoWriter_fourcc(*"mp4v"),
-                              cap.get(cv2.CAP_PROP_FPS), int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-                              int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+out = cv2.VideoWriter("output_video.mp4", fourcc, cap.get(cv2.CAP_PROP_FPS),
+                      (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
 
         while cap.isOpened():
             ret, frame = cap.read()
