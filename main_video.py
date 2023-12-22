@@ -4,6 +4,7 @@ import cv2
 import logging
 import argparse
 import streamlit as st
+import numpy as np
 
 from face_detection import select_face
 from face_swap import face_swap
