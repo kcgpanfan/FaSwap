@@ -18,6 +18,8 @@ if __name__ == '__main__':
     uploaded_source_file = st.file_uploader("Source File", type=['jpg', 'png', 'jpeg'])
     uploaded_target_file = st.file_uploader("Target File", type=['jpg', 'png', 'jpeg'])
 
+    src_face = None  # 添加这一行以确保在条件之外定义'src_face'
+
     if uploaded_source_file is not None and uploaded_target_file is not None:
         source_image = Image.open(uploaded_source_file)
         target_image = Image.open(uploaded_target_file)
